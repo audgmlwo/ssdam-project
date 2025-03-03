@@ -1,7 +1,7 @@
 #  **쓰담쓰담 프로젝트 (Ssdam Ssdam)**  
  **환경 보호를 위한 AI 기반 폐기물 관리 & 커뮤니티 플랫폼**  
 
-## 📌 **프로젝트 개요**
+## **프로젝트 개요**
  **쓰담쓰담**은 AI 기술을 활용한 **폐기물 관리 및 분리배출 안내 서비스**입니다.  
  **주요 기능:**  
 - **AI 폐기물 인식:** 사진을 업로드하면 **AI가 쓰레기 종류를 판별**  
@@ -43,13 +43,13 @@ ssdam-project
 ---
 
 ## **실행 방법**
-### 1️⃣ **백엔드 실행 (Spring Boot)**
+### **백엔드 실행 (Spring Boot)**
 ```bash
 cd backend
 ./gradlew bootRun 
 ```
 
-### 2️⃣ **프론트엔드 실행 (React)**
+### **프론트엔드 실행 (React)**
 ```bash
 cd frontend
 npm install  
@@ -57,14 +57,14 @@ npm install react-dom
 npm run dev  
 ```
 
-### 3️⃣ **모바일 앱 실행 (React Native)**
+### **모바일 앱 실행 (React Native)**
 ```bash
 cd mobile/ssdam-native
 npm install
 npx expo start
 ```
 
-### 4️⃣ **데이터베이스 설정**
+### **데이터베이스 설정**
 1. `database/` 폴더에 있는 SQL 파일을 MySQL에 import  
 2. `.env` 또는 `application.properties`에 DB 정보 추가  
 
@@ -93,15 +93,6 @@ npx expo start
 이 프로젝트는 **MIT 라이선스**를 따릅니다.
 
 ---
-
-##  **팀 프로젝트 기여도**
-| 역할 | 기여 내용 |
-|------|------------------------------------------------|
-| 백엔드 | AI API 개발, DB 설계, 사용자 인증 |
-| 프론트엔드 | UI 개발, API 연동, 반응형 디자인 |
-| 모바일 | Expo 기반 앱 개발, 카메라 연동 |
-| 데이터베이스 | MySQL 테이블 설계, 데이터 저장 |
-
 
 
 ##  **문의 및 연락처**
