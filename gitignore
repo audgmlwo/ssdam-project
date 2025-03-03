@@ -1,0 +1,48 @@
+
+# 운영체제별 불필요한 파일
+.DS_Store
+Thumbs.db
+
+# IDE 및 에디터 설정 파일
+.idea/
+.vscode/
+*.iml
+
+# 로그 파일
+*.log
+
+# 환경 변수 및 설정 파일
+.env
+application.properties
+
+# Node.js 패키지 및 빌드 결과물
+node_modules/
+dist/
+build/
+
+# React 관련
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# React Native 관련
+.expo/
+.expo-shared/
+
+# Gradle 및 Java 빌드 관련
+.gradle/
+bin/
+out/
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA 관련
+*.ipr
+*.iws
+*.swp
+
+# MySQL 데이터 덤프 파일
+*.sql

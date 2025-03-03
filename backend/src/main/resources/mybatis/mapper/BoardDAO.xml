@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.edu.springboot.commboard.IBoardService">
+
+	<select id="list"
+		parameterType="com.edu.springboot.commboard.ParameterDTO"
+		resultType="com.edu.springboot.commboard.BoardDTO">
+		SELECT * FROM (
+		SELECT Tb.*, rownum rNUm FROM(
+		SELECT * FROM
+		comm_board ORDER BY board_idx DESC
+		) Tb
+		)
+		WHERE rNum BETWEEN #{start} AND
+		#{end}
+	</select>
+
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) FROM
+		comm_board
+	</select>
+
+	<select id="old_search"
+		parameterType="com.edu.springboot.commboard.ParameterDTO"
+		resultType="com.edu.springboot.commboard.BoardDTO">
+		SELECT * FROM comm_board
+		
+		<if test="searchWord!=null">
+			WHERE
+			
+			<foreach collection="searchWord" item="str" open="("
+				close=")" separator="or">
+				${searchField} like '%' ||#{str}||'%'
+			</foreach>
+		</if>
+		ORDER BY board_idx DESC
+	</select>
+	
+	<select id="search" parameterType="com.edu.springboot.commboard.ParameterDTO"
+    resultType="com.edu.springboot.commboard.BoardDTO">
+    SELECT * FROM comm_board
+    <where>
+        <if test="searchField == null or searchField == ''">
+            <bind name="searchField" value="'title'" />
+        </if>
+        
+        <if test="searchField == 'email' and searchWord != null and searchWord.size() > 0">
+            email IN
+            <foreach collection="searchWord" item="str" open="(" close=")" separator=",">
+                #{str}
+            </foreach>
+        </if>
+        
+        <if test="searchField != 'email' and searchWord != null and searchWord.size() > 0">
+            <foreach collection="searchWord" item="str" open="(" close=")" separator="or">
+                ${searchField} LIKE '%' || #{str} || '%'
+            </foreach>
+        </if>
+    </where>
+    ORDER BY board_idx DESC
+	</select>
+
+
+	<select id="view"
+		parameterType="com.edu.springboot.commboard.ParameterDTO"
+		resultType="com.edu.springboot.commboard.BoardDTO">
+		SELECT * FROM comm_board WHERE board_idx = #{board_idx}
+	</select>
+	
+	<update id="viewCount" parameterType="int">
+	    UPDATE comm_board SET VISIT_COUNT = VISIT_COUNT + 1 WHERE BOARD_IDX = #{board_idx}
+	</update>
+	
+	<update id="incrementLike" parameterType="map">
+	    MERGE INTO "like" l
+	    USING (SELECT #{board_idx} AS board_idx, #{email} AS email FROM dual) temp
+	    ON (l.board_idx = temp.board_idx AND l.email = temp.email)
+	    WHEN MATCHED THEN
+	        UPDATE SET like_count = NVL(l.like_count, 0) + 1
+	    WHEN NOT MATCHED THEN
+	        INSERT (like_idx, board_idx, email, created_date, like_count)
+	        VALUES (like_seq.NEXTVAL, #{board_idx}, #{email}, SYSDATE, 1)
+	</update>
+
+	<update id="decrementLike" parameterType="map">
+	    UPDATE "like"
+	    SET like_count = like_count - 1
+	    WHERE board_idx = #{board_idx} AND email = #{email}
+	</update>
+
+	<select id="getLikeCount" resultType="int" parameterType="int">
+	    SELECT COALESCE(SUM(like_count), 0) FROM "like" WHERE board_idx = #{board_idx}
+	</select>
+
+	 <insert id="insert"
+      parameterType="com.edu.springboot.commboard.BoardDTO">
+      insert into comm_board (board_idx, title, content, email, ofile)
+      values (comm_board_seq.nextval, #{title}, #{content}, #{email}, #{ofile})
+   	</insert>
+
+	<update id="update"
+		parameterType="com.edu.springboot.commboard.BoardDTO">
+		UPDATE comm_board
+		SET title = #{title}, content =
+		#{content}, CREATED_DATE = SYSDATE, ofile = #{ofile}
+		WHERE board_idx = #{board_idx} AND email
+		= #{email}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM comm_board WHERE
+		board_idx = #{board_idx}
+	</delete>
+	
+
+	
+</mapper>	
+

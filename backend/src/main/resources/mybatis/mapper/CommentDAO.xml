@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.edu.springboot.comment.ICommentService">
+
+    <!-- 특정 게시글의 댓글 조회 -->
+    <resultMap id="commentResultMap" type="com.edu.springboot.comment.CommentDTO">
+        <id property="comment_idx" column="comment_idx"/>
+        <result property="board_idx" column="board_idx"/>
+        <result property="nick_name" column="nick_name"/>
+        <result property="role" column="role"/>
+        <result property="content" column="content"/>
+        <result property="created_date" column="created_date"/>
+    </resultMap>
+
+    <select id="getCommentsByPostIdx" parameterType="java.lang.Integer" resultMap="commentResultMap">
+        SELECT comment_idx, board_idx, nick_name, role, content, created_date 
+        FROM Board_Comments WHERE board_idx = #{boardIdx} ORDER BY created_date ASC
+    </select>
+
+    <!-- 댓글 추가 -->
+    <insert id="insertComment" parameterType="com.edu.springboot.comment.CommentDTO">
+        INSERT INTO Board_Comments (comment_idx, board_idx, nick_name, role, content)
+        VALUES (comment_seq.nextval, #{board_idx}, #{nick_name}, #{role}, #{content})
+    </insert>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM Board_Comments WHERE comment_idx = #{comment_idx}
+    </delete>
+
+</mapper>

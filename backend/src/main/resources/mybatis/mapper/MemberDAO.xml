@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.edu.springboot.member.IMemberService">
+
+	<insert id="insert"
+		parameterType="com.edu.springboot.member.MemberDTO">
+		insert into member (idx, pass, name, nick_name, email,
+		role) values
+		(seq_serial_num.nextval, #{pass},
+		#{name},#{nick_name},#{email}, 'user')
+	</insert>
+
+	<select id="login" resultType="int" parameterType="map">
+		SELECT
+		COUNT(*)
+		FROM member
+		WHERE email = #{email} AND pass = #{pass}
+	</select>
+
+	<select id="getUserByEmail" parameterType="string"
+		resultType="com.edu.springboot.member.MemberDTO">
+		SELECT idx, name, nick_name, email, role, pass FROM member
+		WHERE email =
+		#{email}
+	</select>
+
+	<update id="updateMember"
+		parameterType="com.edu.springboot.member.MemberDTO">
+		UPDATE member
+		SET pass= COALESCE(#{pass}, pass), name =
+		#{name}, nick_name =
+		#{nick_name}
+		WHERE email = #{email} AND idx =
+		#{idx}
+	</update>
+
+	<select id="findEmailCount" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+		FROM member
+		WHERE name = #{name} AND nick_name =
+		#{nick_name}
+	</select>
+
+	<select id="getEmailByNameAndNick" resultType="String"
+		parameterType="map">
+		SELECT email
+		FROM member
+		WHERE name = #{name} AND
+		nick_name = #{nick_name}
+	</select>
+
+	<select id="findPwd" resultType="int" parameterType="map">
+		SELECT
+		COUNT(*)
+		FROM member
+		WHERE email = #{email} AND name = #{name}
+	</select>
+	
+	<update id="updatePwd" parameterType="map">
+	    UPDATE member
+	    SET pass = #{tempPassword}
+	    WHERE email = #{email}
+	</update>
+	
+	<select id="emailExists" resultType="int" parameterType="String">
+    	SELECT COUNT(*) FROM member WHERE email = #{email}
+	</select>
+	
+	<select id="nicknameExists" resultType="int" parameterType="String">
+    	SELECT COUNT(*) FROM member WHERE nick_name = #{nick_name}
+	</select>
+</mapper>	
+
